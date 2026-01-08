@@ -13,6 +13,44 @@ A JupyterLab extension providing branding and token management for KBase CDM Jup
   - Provides easy re-authentication flow
 - **Custom Favicon**: Sets the KBase favicon for the JupyterLab instance
 
+## Architecture
+
+The extension uses React with React Query for state management and API polling.
+
+### Token Monitoring State Machine
+
+The `TokenMonitor` component implements a state machine with four states:
+
+```
+checking → valid → warning → blocked
+             ↑        ↓
+             └────────┘ (on dismiss, after cooldown)
+```
+
+- **checking**: Initial state while fetching token info
+- **valid**: Token is valid and not expiring soon
+- **warning**: Token expires within 5 minutes, dismissible dialog shown
+- **blocked**: Token expired or missing, blocking dialog shown
+
+### Key Components
+
+- `src/index.ts` - JupyterLab plugin entry point
+- `src/components/TokenMonitor.tsx` - Invisible React component that orchestrates token monitoring
+- `src/hooks/useTokenQuery.ts` - React Query hook for polling token status
+- `src/utils/dialogUtils.tsx` - JupyterLab dialog utilities with React content
+- `src/constants.ts` - Configuration (warning threshold, cooldown, poll interval)
+
+### Debug Commands
+
+For testing token dialogs in development, the extension registers debug commands on `window.kbase`:
+
+```javascript
+kbase.showNoTokenDialog()      // Authentication required dialog
+kbase.showWarningDialog(3)     // Session expiring warning (3 min left)
+kbase.showExpiredDialog()      // Session expired dialog
+kbase.dismissDialog()          // Dismiss any open dialog
+```
+
 ## Requirements
 
 - JupyterLab >= 4.0.0
