@@ -1,7 +1,5 @@
 # berdl_jupyterlab_coreui
 
-[![Github Actions Status](https://github.com/kbaseincubator/BERDL_JupyterLab_CoreUI/workflows/Build/badge.svg)](https://github.com/kbaseincubator/BERDL_JupyterLab_CoreUI/actions/workflows/build.yml)
-
 A JupyterLab extension providing branding and token management for KBase CDM JupyterLab.
 
 ## Features
