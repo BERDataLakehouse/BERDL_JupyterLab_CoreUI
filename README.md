@@ -43,10 +43,10 @@ checking → valid → warning → blocked
 For testing token dialogs in development, the extension registers debug commands on `window.kbase`:
 
 ```javascript
-kbase.showNoTokenDialog()      // Authentication required dialog
-kbase.showWarningDialog(3)     // Session expiring warning (3 min left)
-kbase.showExpiredDialog()      // Session expired dialog
-kbase.dismissDialog()          // Dismiss any open dialog
+kbase.showNoTokenDialog(); // Authentication required dialog
+kbase.showWarningDialog(3); // Session expiring warning (3 min left)
+kbase.showExpiredDialog(); // Session expired dialog
+kbase.dismissDialog(); // Dismiss any open dialog
 ```
 
 ## Requirements
