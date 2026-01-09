@@ -3,9 +3,10 @@
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
 
-/* Top panel sizing */
+/* Top panel sizing and alignment */
 #jp-top-panel {
   min-height: 48px !important;
+  align-items: flex-end !important;
 }
 
 /* Make the main logo larger and more prominent */
@@ -22,7 +23,7 @@
   margin-left: 8px !important;
   margin-right: 16px !important;
   margin-top: 1px !important;
-  align-self: center !important;
+  margin-bottom: 4px !important;
 }
 
 /* Dark mode: use white logo */
