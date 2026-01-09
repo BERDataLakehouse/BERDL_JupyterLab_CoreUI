@@ -25,6 +25,11 @@
   align-self: center !important;
 }
 
+/* Dark mode: use white logo */
+[data-jp-theme-light='false'] #jp-MainLogo {
+  background-image: url(./images/kbase_logo_rect_dark.png);
+}
+
 #jp-MainLogo > svg {
   visibility: hidden;
 }
@@ -44,6 +49,10 @@
   visibility: hidden;
 }
 
+[data-jp-theme-light='false'] #jp-RetroLogo {
+  background-image: url(./images/kbase_logo_rect_dark.png);
+}
+
 #jp-NotebookLogo {
   background-image: url(./images/kbase_logo_rect.png);
   background-repeat: no-repeat;
@@ -57,6 +66,10 @@
 
 #jp-NotebookLogo > svg {
   visibility: hidden;
+}
+
+[data-jp-theme-light='false'] #jp-NotebookLogo {
+  background-image: url(./images/kbase_logo_rect_dark.png);
 }
 
 /* Token expiration warning styles */
