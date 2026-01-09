@@ -3,9 +3,9 @@
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
 
-/* Increase the top panel height to accommodate larger logo */
+/* Top panel sizing */
 #jp-top-panel {
-  min-height: 60px !important;
+  min-height: 48px !important;
 }
 
 /* Make the main logo larger and more prominent */
@@ -14,12 +14,15 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center left;
-  width: 175px !important;
-  height: 55px !important;
-  min-width: 175px !important;
-  min-height: 55px !important;
+  width: 160px !important;
+  height: 36px !important;
+  min-width: 160px !important;
+  min-height: 36px !important;
   flex-shrink: 0 !important;
+  margin-left: 8px !important;
   margin-right: 16px !important;
+  margin-top: 1px !important;
+  align-self: center !important;
 }
 
 #jp-MainLogo > svg {
