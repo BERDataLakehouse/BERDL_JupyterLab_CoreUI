@@ -10,6 +10,8 @@ A JupyterLab extension providing branding and token management for KBase CDM Jup
   - Blocks work when token has expired
   - Provides easy re-authentication flow
 - **Custom Favicon**: Sets the KBase favicon for the JupyterLab instance
+- **Server Extension**: Exposes `KBASE_ORIGIN` environment variable to the frontend via PageConfig
+- **Local Development Mode**: Automatically disables token monitoring on localhost or hostnames without dots (e.g., Tailscale)
 
 ## Architecture
 
@@ -40,7 +42,7 @@ checking → valid → warning → blocked
 
 ### Debug Commands
 
-For testing token dialogs in development, the extension registers debug commands on `window.kbase`:
+In local development mode (localhost or no-dot hostnames), the extension registers debug commands on `window.kbase`:
 
 ```javascript
 kbase.showNoTokenDialog(); // Authentication required dialog
@@ -48,6 +50,8 @@ kbase.showWarningDialog(3); // Session expiring warning (3 min left)
 kbase.showExpiredDialog(); // Session expired dialog
 kbase.dismissDialog(); // Dismiss any open dialog
 ```
+
+These commands are only available in local dev mode to facilitate testing token dialogs without needing a real KBase deployment.
 
 This extension is composed of a Python package named `berdl_jupyterlab_coreui`
 for the server extension and a NPM package named `berdl-jupyterlab-coreui`
@@ -93,39 +97,33 @@ jupyter labextension list
 
 ### Development install
 
-Note: You will need NodeJS to build the extension package.
+This project uses [uv](https://docs.astral.sh/uv/) for Python dependency management. Install uv first if you don't have it.
 
-The `jlpm` command is JupyterLab's pinned version of
-[yarn](https://yarnpkg.com/) that is installed with JupyterLab. You may use
-`yarn` or `npm` in lieu of `jlpm` below.
+The `jlpm` command is JupyterLab's pinned version of [yarn](https://yarnpkg.com/) that is installed with JupyterLab.
 
 ```bash
 # Clone the repo to your local environment
 # Change directory to the berdl_jupyterlab_coreui directory
 
-# Set up a virtual environment and install package in development mode
-python -m venv .venv
-source .venv/bin/activate
-pip install --editable ".[dev,test]"
+# Install package in development mode (uv creates/manages virtualenv automatically)
+uv pip install --editable ".[dev,test]"
 
 # Link your development version of the extension with JupyterLab
-jupyter labextension develop . --overwrite
+uv run jupyter labextension develop . --overwrite
 # Server extension must be manually installed in develop mode
-jupyter server extension enable berdl_jupyterlab_coreui
+uv run jupyter server extension enable berdl_jupyterlab_coreui
 
-# Rebuild extension Typescript source after making changes
-# IMPORTANT: Unlike the steps above which are performed only once, do this step
-# every time you make a change.
-jlpm build
+# Rebuild extension TypeScript source after making changes
+uv run jlpm build
 ```
 
 You can watch the source directory and run JupyterLab at the same time in different terminals to watch for changes in the extension's source and automatically rebuild the extension.
 
 ```bash
 # Watch the source directory in one terminal, automatically rebuilding when needed
-jlpm watch
+uv run jlpm watch
 # Run JupyterLab in another terminal
-jupyter lab
+uv run jupyter lab
 ```
 
 With the watch command running, every saved change will immediately be built locally and available in your running JupyterLab. Refresh JupyterLab to load the change in your browser (you may need to wait several seconds for the extension to be rebuilt).
@@ -133,19 +131,19 @@ With the watch command running, every saved change will immediately be built loc
 By default, the `jlpm build` command generates the source maps for this extension to make it easier to debug using the browser dev tools. To also generate source maps for the JupyterLab core extensions, you can run the following command:
 
 ```bash
-jupyter lab build --minimize=False
+uv run jupyter lab build --minimize=False
 ```
 
 ### Development uninstall
 
 ```bash
 # Server extension must be manually disabled in develop mode
-jupyter server extension disable berdl_jupyterlab_coreui
-pip uninstall berdl_jupyterlab_coreui
+uv run jupyter server extension disable berdl_jupyterlab_coreui
+uv pip uninstall berdl_jupyterlab_coreui
 ```
 
 In development mode, you will also need to remove the symlink created by `jupyter labextension develop`
-command. To find its location, you can run `jupyter labextension list` to figure out where the `labextensions`
+command. To find its location, you can run `uv run jupyter labextension list` to figure out where the `labextensions`
 folder is located. Then you can remove the symlink named `berdl-jupyterlab-coreui` within that folder.
 
 ### Testing the extension
@@ -154,29 +152,23 @@ folder is located. Then you can remove the symlink named `berdl-jupyterlab-coreu
 
 This extension is using [Pytest](https://docs.pytest.org/) for Python code testing.
 
-Install test dependencies (needed only once):
-
 ```sh
-pip install -e ".[test]"
-# Each time you install the Python package, you need to restore the front-end extension link
-jupyter labextension develop . --overwrite
-```
-
-To execute them, run:
-
-```sh
-pytest -vv -r ap --cov berdl_jupyterlab_coreui
+uv run pytest -vv -r ap --cov berdl_jupyterlab_coreui
 ```
 
 #### Frontend tests
 
 This extension is using [Jest](https://jestjs.io/) for JavaScript code testing.
 
-To execute them, execute:
+```sh
+uv run jlpm test
+```
+
+#### Linting
 
 ```sh
-jlpm
-jlpm test
+uv run jlpm run lint       # Check for issues
+uv run jlpm run lint:fix   # Auto-fix issues
 ```
 
 #### Integration tests
