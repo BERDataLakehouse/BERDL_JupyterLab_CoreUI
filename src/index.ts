@@ -6,6 +6,7 @@ import { ReactWidget } from '@jupyterlab/apputils';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { TokenMonitor } from './components/TokenMonitor';
 import { registerDebugCommands } from './debug';
+import { isLocalDev } from './utils/auth';
 import React from 'react';
 
 const EXTENSION_ID = 'berdl-jupyterlab-coreui';
@@ -22,6 +23,13 @@ const plugin: JupyterFrontEndPlugin<void> = {
   autoStart: true,
   activate: (app: JupyterFrontEnd) => {
     console.log(`JupyterLab extension ${EXTENSION_ID} is activated!`);
+
+    // Skip token monitoring in local development
+    if (isLocalDev()) {
+      console.log(`${EXTENSION_ID}: Local dev detected, skipping token monitor`);
+      registerDebugCommands();
+      return;
+    }
 
     const queryClient = new QueryClient({
       defaultOptions: {
@@ -48,8 +56,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     // Add to shell to trigger React mounting
     app.shell.add(monitorWidget, 'bottom');
-
-    registerDebugCommands();
   }
 };
 

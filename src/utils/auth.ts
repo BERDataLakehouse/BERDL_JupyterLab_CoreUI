@@ -1,6 +1,25 @@
 import { PageConfig } from '@jupyterlab/coreutils';
 
 /**
+ * Check if running in a local development environment.
+ * Returns true for localhost, loopback IP, or hostnames without a TLD
+ * (e.g. local network names).
+ *
+ * Tests can set window.__KBASE_DIALOG_TEST__ to force production mode.
+ */
+export const isLocalDev = (): boolean => {
+  if ((window as any).__KBASE_DIALOG_TEST__) {
+    return false;
+  }
+  const hostname = window.location.hostname;
+  return (
+    hostname === 'localhost' ||
+    hostname === '127.0.0.1' ||
+    !hostname.includes('.')
+  );
+};
+
+/**
  * Get the KBase origin URL from environment.
  */
 export const getKBaseOrigin = (): string => {
