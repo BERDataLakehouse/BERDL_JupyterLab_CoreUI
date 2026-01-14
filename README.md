@@ -167,8 +167,8 @@ uv run jlpm test
 #### Linting
 
 ```sh
-uv run jlpm run lint       # Check for issues
-uv run jlpm run lint:fix   # Auto-fix issues
+uv run jlpm run lint:check  # Check for issues
+uv run jlpm run lint        # Auto-fix issues
 ```
 
 #### Integration tests

@@ -58,16 +58,14 @@ test.describe('Production mode (token dialogs)', () => {
   };
 
   const setMockCookie = async (page: any, hostname: string) => {
-    await page
-      .context()
-      .addCookies([
-        {
-          name: 'kbase_session',
-          value: 'mock-token',
-          domain: hostname,
-          path: '/'
-        }
-      ]);
+    await page.context().addCookies([
+      {
+        name: 'kbase_session',
+        value: 'mock-token',
+        domain: hostname,
+        path: '/'
+      }
+    ]);
   };
 
   const mockTokenApi = async (page: any, response: object) => {
