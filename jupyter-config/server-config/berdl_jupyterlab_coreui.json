@@ -1,0 +1,7 @@
+{
+  "ServerApp": {
+    "jpserver_extensions": {
+      "berdl_jupyterlab_coreui": true
+    }
+  }
+}

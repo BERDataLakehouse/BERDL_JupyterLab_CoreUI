@@ -1,12 +1,12 @@
 # Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: v4.5.0
+_commit: v4.5.1
 _src_path: https://github.com/jupyterlab/extension-template
 author_email: engage@kbase.us
 author_name: KBase
 has_ai_rules: false
 has_binder: false
 has_settings: false
-kind: frontend
+kind: frontend-and-server
 labextension_name: berdl-jupyterlab-coreui
 project_short_description: A JupyterLab extension providing tree browser and branding
     for KBase CDM JupyterLab.

@@ -49,6 +49,10 @@ kbase.showExpiredDialog(); // Session expired dialog
 kbase.dismissDialog(); // Dismiss any open dialog
 ```
 
+This extension is composed of a Python package named `berdl_jupyterlab_coreui`
+for the server extension and a NPM package named `berdl-jupyterlab-coreui`
+for the frontend extension.
+
 ## Requirements
 
 - JupyterLab >= 4.0.0
@@ -69,6 +73,22 @@ To remove the extension, execute:
 pip uninstall berdl_jupyterlab_coreui
 ```
 
+## Troubleshoot
+
+If you are seeing the frontend extension, but it is not working, check
+that the server extension is enabled:
+
+```bash
+jupyter server extension list
+```
+
+If the server extension is installed and enabled, but you are not seeing
+the frontend extension, check the frontend extension is installed:
+
+```bash
+jupyter labextension list
+```
+
 ## Contributing
 
 ### Development install
@@ -86,10 +106,12 @@ The `jlpm` command is JupyterLab's pinned version of
 # Set up a virtual environment and install package in development mode
 python -m venv .venv
 source .venv/bin/activate
-pip install --editable "."
+pip install --editable ".[dev,test]"
 
 # Link your development version of the extension with JupyterLab
 jupyter labextension develop . --overwrite
+# Server extension must be manually installed in develop mode
+jupyter server extension enable berdl_jupyterlab_coreui
 
 # Rebuild extension Typescript source after making changes
 # IMPORTANT: Unlike the steps above which are performed only once, do this step
@@ -117,6 +139,8 @@ jupyter lab build --minimize=False
 ### Development uninstall
 
 ```bash
+# Server extension must be manually disabled in develop mode
+jupyter server extension disable berdl_jupyterlab_coreui
 pip uninstall berdl_jupyterlab_coreui
 ```
 
@@ -125,6 +149,24 @@ command. To find its location, you can run `jupyter labextension list` to figure
 folder is located. Then you can remove the symlink named `berdl-jupyterlab-coreui` within that folder.
 
 ### Testing the extension
+
+#### Server tests
+
+This extension is using [Pytest](https://docs.pytest.org/) for Python code testing.
+
+Install test dependencies (needed only once):
+
+```sh
+pip install -e ".[test]"
+# Each time you install the Python package, you need to restore the front-end extension link
+jupyter labextension develop . --overwrite
+```
+
+To execute them, run:
+
+```sh
+pytest -vv -r ap --cov berdl_jupyterlab_coreui
+```
 
 #### Frontend tests
 
