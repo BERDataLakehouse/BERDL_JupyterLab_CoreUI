@@ -1,6 +1,6 @@
 {
     "name": "berdl-jupyterlab-coreui",
-    "version": "0.1.0",
+    "version": "0.0.0",
     "description": "A JupyterLab extension providing tree browser and branding for KBase CDM JupyterLab.",
     "keywords": [
         "jupyter",
