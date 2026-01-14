@@ -58,9 +58,16 @@ test.describe('Production mode (token dialogs)', () => {
   };
 
   const setMockCookie = async (page: any, hostname: string) => {
-    await page.context().addCookies([
-      { name: 'kbase_session', value: 'mock-token', domain: hostname, path: '/' }
-    ]);
+    await page
+      .context()
+      .addCookies([
+        {
+          name: 'kbase_session',
+          value: 'mock-token',
+          domain: hostname,
+          path: '/'
+        }
+      ]);
   };
 
   const mockTokenApi = async (page: any, response: object) => {
@@ -80,14 +87,19 @@ test.describe('Production mode (token dialogs)', () => {
     await setupProductionMode(page, baseURL!);
 
     await page.route('**/services/auth/api/V2/token', (route: any) => {
-      route.fulfill({ status: 401, body: JSON.stringify({ error: 'Unauthorized' }) });
+      route.fulfill({
+        status: 401,
+        body: JSON.stringify({ error: 'Unauthorized' })
+      });
     });
 
     await page.goto(baseURL!);
 
     const dialog = page.locator('.jp-Dialog');
     await expect(dialog).toBeVisible({ timeout: 30000 });
-    await expect(dialog.locator('.jp-Dialog-content')).toContainText(/authenticat/i);
+    await expect(dialog.locator('.jp-Dialog-content')).toContainText(
+      /authenticat/i
+    );
   });
 
   test('should show warning dialog when token is expiring soon', async ({
@@ -106,7 +118,9 @@ test.describe('Production mode (token dialogs)', () => {
 
     const dialog = page.locator('.jp-Dialog');
     await expect(dialog).toBeVisible({ timeout: 30000 });
-    await expect(dialog.locator('.jp-Dialog-content')).toContainText(/expir|session/i);
+    await expect(dialog.locator('.jp-Dialog-content')).toContainText(
+      /expir|session/i
+    );
   });
 
   test('should show expired dialog when token is already expired', async ({
@@ -125,10 +139,15 @@ test.describe('Production mode (token dialogs)', () => {
 
     const dialog = page.locator('.jp-Dialog');
     await expect(dialog).toBeVisible({ timeout: 30000 });
-    await expect(dialog.locator('.jp-Dialog-content')).toContainText(/expired/i);
+    await expect(dialog.locator('.jp-Dialog-content')).toContainText(
+      /expired/i
+    );
   });
 
-  test('should not show dialog when token is valid', async ({ page, baseURL }) => {
+  test('should not show dialog when token is valid', async ({
+    page,
+    baseURL
+  }) => {
     const hostname = await setupProductionMode(page, baseURL!);
     await setMockCookie(page, hostname);
     await mockTokenApi(page, {

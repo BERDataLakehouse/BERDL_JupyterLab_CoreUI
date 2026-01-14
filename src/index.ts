@@ -26,7 +26,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     // Skip token monitoring in local development
     if (isLocalDev()) {
-      console.log(`${EXTENSION_ID}: Local dev detected, skipping token monitor`);
+      console.log(
+        `${EXTENSION_ID}: Local dev detected, skipping token monitor`
+      );
       registerDebugCommands();
       return;
     }
