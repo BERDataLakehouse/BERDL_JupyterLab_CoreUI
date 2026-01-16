@@ -26,4 +26,7 @@ def _load_jupyter_server_extension(server_app):
     if kbase_origin := os.environ.get("KBASE_ORIGIN"):
         page_config["kbaseOrigin"] = kbase_origin
 
+    if profile_json := os.environ.get("BERDL_PROFILE_JSON"):
+        page_config["berdlProfile"] = profile_json
+
     server_app.log.info("Registered berdl_jupyterlab_coreui server extension")

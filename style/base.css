@@ -21,6 +21,7 @@
   min-height: 36px !important;
   flex-shrink: 0 !important;
   margin: 1px 16px 4px 8px !important;
+  order: -100 !important;
 }
 
 /* Dark mode: use white logo */
@@ -68,6 +69,54 @@
 
 [data-jp-theme-light='false'] #jp-NotebookLogo {
   background-image: url(./images/kbase_logo_rect_dark.png);
+}
+
+/* Profile widget in header */
+.berdl-profile-widget-container {
+  display: flex;
+  align-items: center;
+  position: absolute !important;
+  left: 185px; /* Position after the logo */
+  top: 2px;
+}
+
+.berdl-profile-widget {
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-bottom: 2px;
+  border-bottom: var(--jp-border-width) solid var(--jp-border-color0);
+}
+
+.berdl-profile-text {
+  font-size: 11px;
+  color: var(--jp-ui-font-color2);
+  white-space: nowrap;
+}
+
+.berdl-profile-text strong {
+  color: var(--jp-ui-font-color1);
+}
+
+.berdl-profile-respawn-link {
+  font-size: 11px;
+  color: #2196f3 !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+}
+
+.berdl-profile-respawn-link:hover {
+  color: #1976d2 !important;
+  text-decoration: underline !important;
+}
+
+/* Change profile dialog */
+.berdl-change-profile-dialog {
+  padding: 8px 0;
+  line-height: 1.5;
+}
+
+.berdl-change-profile-dialog p {
+  margin: 8px 0;
 }
 
 /* Token expiration warning styles */
