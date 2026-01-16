@@ -11,3 +11,12 @@ export interface ITokenInfo {
   custom: Record<string, string>;
   cachefor: number;
 }
+
+/**
+ * BERDL JupyterHub spawn profile information
+ */
+export interface IBerdlProfile {
+  slug: string;
+  display_name: string;
+  description: string;
+}
