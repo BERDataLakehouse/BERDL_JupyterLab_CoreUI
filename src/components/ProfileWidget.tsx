@@ -31,7 +31,7 @@ export const ProfileWidget: React.FC = () => {
           onClick={isChanging ? undefined : handleChangeClick}
           title="Stop server and choose a different profile"
         >
-          {isChanging ? 'Stopping...' : 'Respawn'}
+          {isChanging ? 'Stopping...' : 'Switch'}
         </a>
       </span>
     </div>
