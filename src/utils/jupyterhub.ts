@@ -28,6 +28,14 @@ const getHubConfig = () => {
 };
 
 /**
+ * Get XSRF token from cookies.
+ */
+const getXsrfToken = (): string | null => {
+  const match = document.cookie.match('\\b_xsrf=([^;]*)\\b');
+  return match ? match[1] : null;
+};
+
+/**
  * Stop the current server and redirect to the spawn page.
  */
 export const stopServerAndRedirect = async (): Promise<void> => {
@@ -40,13 +48,20 @@ export const stopServerAndRedirect = async (): Promise<void> => {
 
   const serverPath = hubServerName ? `servers/${hubServerName}` : 'server';
   const stopUrl = `${hubPrefix}api/users/${hubUser}/${serverPath}`;
+  const xsrfToken = getXsrfToken();
 
   try {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json'
+    };
+    if (xsrfToken) {
+      headers['X-XSRFToken'] = xsrfToken;
+    }
+
     const response = await fetch(stopUrl, {
       method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      headers,
+      credentials: 'include'
     });
 
     if (!response.ok && response.status !== 204) {
