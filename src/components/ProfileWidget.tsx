@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react';
-import { getBerdlProfile, stopServerAndRedirect } from '../utils/jupyterhub';
+import React, { useCallback } from 'react';
+import { getBerdlProfile, redirectToHubHome } from '../utils/jupyterhub';
 import { showChangeProfileDialog } from '../utils/dialogUtils';
 
 /**
@@ -7,13 +7,11 @@ import { showChangeProfileDialog } from '../utils/dialogUtils';
  */
 export const ProfileWidget: React.FC = () => {
   const profile = getBerdlProfile();
-  const [isChanging, setIsChanging] = useState(false);
 
   const handleChangeClick = useCallback(async () => {
     const confirmed = await showChangeProfileDialog();
     if (confirmed) {
-      setIsChanging(true);
-      await stopServerAndRedirect();
+      redirectToHubHome();
     }
   }, []);
 
@@ -28,10 +26,10 @@ export const ProfileWidget: React.FC = () => {
         {profile.description} &nbsp;
         <a
           className="berdl-profile-respawn-link"
-          onClick={isChanging ? undefined : handleChangeClick}
-          title="Stop server and choose a different profile"
+          onClick={handleChangeClick}
+          title="Go to Hub control panel to change profile"
         >
-          {isChanging ? 'Stopping...' : 'Switch'}
+          Switch
         </a>
       </span>
     </div>

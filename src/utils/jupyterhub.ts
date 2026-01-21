@@ -28,36 +28,9 @@ const getHubConfig = () => {
 };
 
 /**
- * Stop the current server and redirect to the spawn page.
+ * Redirect to the Hub control panel where users can stop/start their server.
  */
-export const stopServerAndRedirect = async (): Promise<void> => {
-  const { hubPrefix, hubUser, hubServerName } = getHubConfig();
-
-  if (!hubUser) {
-    console.error('Not running under JupyterHub');
-    return;
-  }
-
-  const serverPath = hubServerName ? `servers/${hubServerName}` : 'server';
-  const stopUrl = `${hubPrefix}api/users/${hubUser}/${serverPath}`;
-
-  try {
-    const response = await fetch(stopUrl, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-
-    if (!response.ok && response.status !== 204) {
-      throw new Error(`Failed to stop server: ${response.status}`);
-    }
-
-    setTimeout(() => {
-      window.location.href = `${hubPrefix}spawn`;
-    }, 500);
-  } catch (error) {
-    console.error('Error stopping server:', error);
-    window.location.href = `${hubPrefix}home`;
-  }
+export const redirectToHubHome = (): void => {
+  const { hubPrefix } = getHubConfig();
+  window.location.href = `${hubPrefix}home`;
 };
