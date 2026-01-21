@@ -5,7 +5,8 @@ import { createRoot } from 'react-dom/client';
 import {
   NoTokenDialogContent,
   WarningDialogContent,
-  BlockingDialogContent
+  BlockingDialogContent,
+  ChangeProfileDialogContent
 } from '../components/dialogs';
 
 // Track the current dialog so it can be dismissed
@@ -85,4 +86,20 @@ export const showBlockingDialog = async (): Promise<void> => {
     buttons: [Dialog.okButton({ label: 'Re-authenticate' })],
     hasClose: false
   });
+};
+
+/**
+ * Shows the change profile confirmation dialog.
+ * @returns true if user confirmed, false if cancelled
+ */
+export const showChangeProfileDialog = async (): Promise<boolean> => {
+  const result = await showTrackedDialog({
+    title: 'Change Server Profile',
+    body: renderToWidget(<ChangeProfileDialogContent />),
+    buttons: [
+      Dialog.cancelButton({ label: 'Cancel' }),
+      Dialog.warnButton({ label: 'Stop Server & Change' })
+    ]
+  });
+  return result.button.accept;
 };

@@ -5,6 +5,7 @@ import {
 import { ReactWidget } from '@jupyterlab/apputils';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { TokenMonitor } from './components/TokenMonitor';
+import { ProfileWidget } from './components/ProfileWidget';
 import { registerDebugCommands } from './debug';
 import { isLocalDev } from './utils/auth';
 import React from 'react';
@@ -23,6 +24,14 @@ const plugin: JupyterFrontEndPlugin<void> = {
   autoStart: true,
   activate: (app: JupyterFrontEnd) => {
     console.log(`JupyterLab extension ${EXTENSION_ID} is activated!`);
+
+    // Add profile widget to header (visible in both local dev and production)
+    const profileWidget = ReactWidget.create(
+      React.createElement(ProfileWidget)
+    );
+    profileWidget.id = 'berdl-profile-widget';
+    profileWidget.addClass('berdl-profile-widget-container');
+    app.shell.add(profileWidget, 'top');
 
     // Skip token monitoring in local development
     if (isLocalDev()) {
