@@ -3,6 +3,7 @@ import {
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
 import { ReactWidget } from '@jupyterlab/apputils';
+import { PageConfig } from '@jupyterlab/coreutils';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { TokenMonitor } from './components/TokenMonitor';
 import { ProfileWidget } from './components/ProfileWidget';
@@ -24,6 +25,21 @@ const plugin: JupyterFrontEndPlugin<void> = {
   autoStart: true,
   activate: (app: JupyterFrontEnd) => {
     console.log(`JupyterLab extension ${EXTENSION_ID} is activated!`);
+
+    // Override hub:restart to redirect to user URL instead of /hub/spawn
+    // This allows implicit_spawn_seconds to auto-spawn with the previous profile
+    const hubUser = PageConfig.getOption('hubUser');
+    const baseUrl = PageConfig.getOption('baseUrl') || `/user/${hubUser}/`;
+    if (hubUser) {
+      app.commands.addCommand('hub:restart', {
+        label: 'Restart Server',
+        caption: 'Request that the Hub restart this server',
+        execute: () => {
+          // Redirect to user URL - implicit_spawn_seconds will auto-spawn
+          window.location.href = baseUrl;
+        }
+      });
+    }
 
     // Add profile widget to header (visible in both local dev and production)
     const profileWidget = ReactWidget.create(
