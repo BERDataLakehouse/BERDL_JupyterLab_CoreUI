@@ -9,9 +9,6 @@ export const BlockingDialogContent: React.FC = () => (
       <strong>Your session token has expired.</strong>
     </p>
     <p>You must re-authenticate with KBase to continue working.</p>
-    <p>
-      Any unsaved work may be lost. Please save your notebooks before
-      re-authenticating.
-    </p>
+    <p>Any unsaved work may be lost.</p>
   </div>
 );
