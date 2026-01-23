@@ -5,10 +5,13 @@ import React from 'react';
  */
 export const ChangeProfileDialogContent: React.FC = () => (
   <div className="berdl-change-profile-dialog">
-    <p>This will stop your current server and Spark cluster.</p>
+    <p>You'll be taken to the Hub control panel.</p>
+    <p>
+      Click <strong>Stop My Server</strong>, then{' '}
+      <strong>Start My Server</strong> to choose a new profile.
+    </p>
     <p>
       <strong>Any unsaved work will be lost.</strong>
     </p>
-    <p>You will be redirected to choose a new profile.</p>
   </div>
 );
