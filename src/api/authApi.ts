@@ -1,3 +1,6 @@
+import { URLExt } from '@jupyterlab/coreutils';
+import { ServerConnection } from '@jupyterlab/services';
+
 import { ITokenInfo } from '../types';
 import { getKBaseOrigin, getAuthToken } from '../utils/auth';
 
@@ -37,4 +40,21 @@ export const fetchTokenInfo = async (): Promise<ITokenInfo> => {
   }
 
   return response.json();
+};
+
+/**
+ * Sync the current KBase session cookie to the Jupyter server process
+ * so that server-side Python code has access to the fresh token.
+ */
+export const syncTokenToServer = async (): Promise<void> => {
+  const settings = ServerConnection.makeSettings();
+  const url = URLExt.join(settings.baseUrl, 'api/berdl-coreui/token-sync');
+  const response = await ServerConnection.makeRequest(
+    url,
+    { method: 'POST' },
+    settings
+  );
+  if (!response.ok) {
+    throw new Error(`Token sync failed: ${response.status}`);
+  }
 };

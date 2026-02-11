@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
+import { Notification } from '@jupyterlab/apputils';
 import { useTokenQuery } from '../hooks/useTokenQuery';
-import { NoTokenError } from '../api/authApi';
+import { NoTokenError, syncTokenToServer } from '../api/authApi';
 import { redirectToReauth } from '../utils/auth';
 import {
   showNoTokenDialog,
@@ -33,6 +34,28 @@ export const TokenMonitor: React.FC = () => {
   const tokenQuery = useTokenQuery(state !== 'blocked');
   const tokenExpires = tokenQuery.data?.expires ?? null;
   const hasNoToken = tokenQuery.error instanceof NoTokenError;
+  const syncErrorNotified = useRef(false);
+
+  // Sync fresh token to server process on every successful token poll
+  useEffect(() => {
+    if (!tokenQuery.dataUpdatedAt) {
+      return;
+    }
+    (async () => {
+      try {
+        await syncTokenToServer();
+        syncErrorNotified.current = false;
+      } catch {
+        if (!syncErrorNotified.current) {
+          syncErrorNotified.current = true;
+          Notification.emit(
+            'Failed to sync authentication token to server',
+            'warning'
+          );
+        }
+      }
+    })();
+  }, [tokenQuery.dataUpdatedAt]);
 
   // Handle terminal conditions: no token or expired
   useEffect(() => {

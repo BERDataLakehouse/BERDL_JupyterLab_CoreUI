@@ -20,8 +20,19 @@ def _jupyter_server_extension_points():
 
 
 def _load_jupyter_server_extension(server_app):
-    """Set KBase configuration in PageConfig from environment variables."""
-    page_config = server_app.web_app.settings.setdefault("page_config_data", {})
+    """Register handlers and set KBase configuration in PageConfig."""
+    from jupyter_server.utils import url_path_join
+
+    from .handlers import TokenSyncHandler
+
+    web_app = server_app.web_app
+    base_url = web_app.settings["base_url"]
+
+    web_app.add_handlers(".*$", [
+        (url_path_join(base_url, "api", "berdl-coreui", "token-sync"), TokenSyncHandler),
+    ])
+
+    page_config = web_app.settings.setdefault("page_config_data", {})
 
     if kbase_origin := os.environ.get("KBASE_ORIGIN"):
         page_config["kbaseOrigin"] = kbase_origin
